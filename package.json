@@ -2,7 +2,7 @@
     "name": "now-playing",
     "displayName": "Now Playing",
     "description": "Show current playing track in status bar (macOS only)",
-    "version": "0.1.2",
+    "version": "0.1.3",
     "publisher": "spywhere",
     "icon": "images/icon.png",
     "bugs": {
@@ -10,10 +10,9 @@
     },
     "homepage": "https://github.com/spywhere/vscode-now-playing/blob/master/README.md",
     "keywords": [
-        "itunes",
-        "vox",
         "playing",
-        "music"
+        "music",
+        "control"
     ],
     "license": "MIT",
     "repository": {
@@ -62,12 +61,12 @@
                 },
                 "now-playing.tooltipFormat.playing": {
                     "type": "string",
-                    "default": "Now Playing [{currentTime:duration}/{totalTime:duration}]\nTrack: {name:Unknown}\nArtist: {artist:Unknown}\nAlbum Artist: {albumArtist:Unknown}",
+                    "default": "Now Playing [{currentTime:duration}/{totalTime:duration}]\nTrack: {name:Unknown}\nArtist: {artist:Unknown}\nAlbum Artist: {albumArtist:Unknown}\nAlbum: {album:Unknown}",
                     "description": "Status's tooltip format."
                 },
                 "now-playing.tooltipFormat.paused": {
                     "type": "string",
-                    "default": "Paused [{currentTime:duration}/{totalTime:duration}]\nTrack: {name:Unknown}\nArtist: {artist:Unknown}\nAlbum Artist: {albumArtist:Unknown}",
+                    "default": "Paused [{currentTime:duration}/{totalTime:duration}]\nTrack: {name:Unknown}\nArtist: {artist:Unknown}\nAlbum Artist: {albumArtist:Unknown}\nAlbum: {album:Unknown}",
                     "description": "Status's tooltip format."
                 },
                 "now-playing.action": {
