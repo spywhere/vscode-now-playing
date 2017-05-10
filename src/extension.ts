@@ -1,6 +1,7 @@
 "use strict";
 import * as vscode from "vscode";
 import * as path from "path";
+import * as os from "os";
 import { exec } from "child_process";
 
 export function activate(context: vscode.ExtensionContext) {
@@ -142,6 +143,18 @@ class NowPlaying {
 
         if (this.timer) {
             clearInterval(this.timer);
+        }
+
+        if (os.platform() !== "darwin") {
+            this.statusItem.show();
+            this.statusItem.text = (
+                "$(alert) Sorry, Now Playing extension does not " +
+                "support on this platform."
+            );
+            this.statusItem.tooltip = undefined;
+            this.statusItem.command = undefined;
+            setTimeout(() => this.statusItem.hide(), 5000);
+            return;
         }
 
         if(this.autoHideDuration === 0){
