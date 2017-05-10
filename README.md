@@ -13,10 +13,10 @@ Now Playing is simply an extension that show current playing track in Visual Stu
 
 Now Playing supports the following media player...
 
-- VLC - Play/Stop, Mute, Next and Previous
-- QuickTime Player - Play and Pause (only the first window opened)
-- iTunes - Play/Pause, Stop, Next and Previous
-- VOX - Play/Pause, Next and Previous
+- **VLC** - Play/Stop, Mute, Next and Previous
+- **QuickTime Player** - Play and Pause (only the first window opened)
+- **iTunes** - Play/Pause, Stop, Next and Previous
+- **VOX** - Play/Pause, Next and Previous
 
 ### How to use it?
 Simply install the extension, and you can use it right away (after restart)!
@@ -49,7 +49,7 @@ All player has the following properties to display in the status text or tooltip
 
 To insert the property into the status text or tooltip, use `{<Property Name>}`.
 
-For string, you can set the default value, prefix and suffix by using `{<Property Name>:<Default Value>:<Prefix>:<Suffix>}`. All options are optional.
+For string, you can set the default value, prefix, suffix and maximum length by using `{<Property Name>:<Default Value>:<Prefix>:<Suffix>:<Max Length>}`. All options are optional.
 
 For number, you can represent it different ways by use the following options...
 
@@ -61,7 +61,7 @@ Examples:
 
 Format|Artist: Unknown - Track: `What's the matter?`|Artist: `Jabba` - Track: `What's the matter?`
 :-:|:-:|:-:
-`{artist} - {name}`|` - What's the matter?`|`Jabba - What's the matter?`
+`{artist} - {name:::10}`|` - What's the...`|`Jabba - What's the...`
 `{artist:Unknown} - {name}`|`Unknown - What's the matter?`|`Jabba - What's the matter?`
 `{artist::: - }{name}`|`What's the matter?`|`Jabba - What's the matter?`
 `{artist:Unknown:: - }{name}`|`UnknownWhat's the matter?`|`Jabba - What's the matter?`

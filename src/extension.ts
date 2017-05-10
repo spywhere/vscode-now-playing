@@ -440,10 +440,21 @@ class NowPlaying {
                 }
 
                 if (typeof(value) === "string" && format) {
-                    let [defaultValue, prefix, suffix] = format.split(":");
+                    let [
+                        defaultValue, prefix, suffix, length
+                    ] = format.split(":");
                     if (!value) {
                         value = defaultValue || "";
-                    } else {
+                    }
+                    if (
+                        length && new RegExp("^\\d+$", "g").test(length) &&
+                        value.length > parseInt(length)
+                    ) {
+                        value = `${
+                            value.substr(0, parseInt(length)).trim()
+                        }...`
+                    }
+                    if (value) {
                         value = (prefix || "") + value + (suffix || "");
                     }
                 }else if (typeof(value) === "number" && format) {

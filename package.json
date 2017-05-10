@@ -2,7 +2,7 @@
     "name": "now-playing",
     "displayName": "Now Playing",
     "description": "Show current playing track in status bar (macOS only)",
-    "version": "0.1.1",
+    "version": "0.1.2",
     "publisher": "spywhere",
     "icon": "images/icon.png",
     "bugs": {
@@ -52,17 +52,17 @@
                 },
                 "now-playing.statusFormat.playing": {
                     "type": "string",
-                    "default": "$(triangle-right) {artist::: - }{name:Unknown} [{currentTime:duration}/{totalTime:duration}]",
+                    "default": "$(triangle-right) {artist::: - :30}{name:Unknown:::30} [{currentTime:duration}/{totalTime:duration}]",
                     "description": "Status text format."
                 },
                 "now-playing.statusFormat.paused": {
                     "type": "string",
-                    "default": "{artist::: - }{name:Unknown} [{currentTime:duration}/{totalTime:duration}]",
+                    "default": "{artist::: - :30}{name:Unknown:::30} [{currentTime:duration}/{totalTime:duration}]",
                     "description": "Status text format."
                 },
                 "now-playing.tooltipFormat.playing": {
                     "type": "string",
-                    "default": "Now Playing [{currentTime:tduration/{totalTime:duration}]\nTrack: {name:Unknown}\nArtist: {artist:Unknown}\nAlbum Artist: {albumArtist:Unknown}",
+                    "default": "Now Playing [{currentTime:duration}/{totalTime:duration}]\nTrack: {name:Unknown}\nArtist: {artist:Unknown}\nAlbum Artist: {albumArtist:Unknown}",
                     "description": "Status's tooltip format."
                 },
                 "now-playing.tooltipFormat.paused": {
