@@ -101,6 +101,11 @@ class NowPlaying {
     private statusItem: vscode.StatusBarItem;
     private timer?: NodeJS.Timer;
     private lastInformation?: TrackInformation;
+    private lastRuntime = 0;
+    private lastKill = false;
+    private hasEverKill = false;
+    private avgRuntime = 0;
+    private sampleSize = 0;
 
     constructor(){
         this.statusItem = vscode.window.createStatusBarItem(
@@ -140,6 +145,14 @@ class NowPlaying {
         this.hideOnPause = configurations.get<boolean>("hideOnPause");
         this.autoHideDuration = configurations.get<number>("autoHide");
         this.updateInterval = configurations.get<number>("refreshInterval");
+
+        if (this.updateInterval < 0.25) {
+            vscode.window.showWarningMessage(
+                `[Now Playing] Media player information might not available within ${
+                    (this.updateInterval * 1000).toFixed(0)
+                }ms interval.`
+            );
+        }
 
         if (this.timer) {
             clearInterval(this.timer);
@@ -283,12 +296,30 @@ class NowPlaying {
 
     executeCommand(command: string){
         return new Promise<string>((resolve, reject) => {
-            exec(command, (error, stdout, stderr) => {
+            let startTimer = Date.now();
+            let timeoutTimer: NodeJS.Timer;
+            let childProcess = exec(command, (error, stdout, stderr) => {
+                clearTimeout(timeoutTimer);
                 if (error) {
                     return reject(new Error(stderr));
                 }
+
+                this.lastKill = false;
+                this.lastRuntime = Date.now() - startTimer;
+                if (this.sampleSize < 1000) {
+                    this.sampleSize += 1;
+                    this.avgRuntime += (
+                        this.lastRuntime - this.avgRuntime
+                    ) / this.sampleSize;
+                }
                 return resolve(stdout);
             });
+            timeoutTimer = setTimeout(() => {
+                this.lastKill = true;
+                this.hasEverKill = true;
+                childProcess.kill();
+                reject(new Error("killed"));
+            }, this.updateInterval * 1000);
         });
     }
 
@@ -435,11 +466,26 @@ class NowPlaying {
             (match, name, m2, format) => {
                 let value: any = "";
 
-                if (trackInformation[name] !== undefined) {
+                if (name === "dbgRuntime") {
+                    value = this.lastRuntime;
+                } else if (name === "dbgAvgRuntime") {
+                    value = this.avgRuntime;
+                } else if (name === "dbgSampleSize") {
+                    value = this.sampleSize;
+                } else if (name === "dbgKill") {
+                    value = this.lastKill;
+                } else if (name === "dbgHasKill") {
+                    value = this.hasEverKill;
+                } else if (trackInformation[name] !== undefined) {
                     value = trackInformation[name];
                 }
 
-                if (typeof(value) === "string" && format) {
+                if (typeof(value) === "boolean" && format) {
+                    let [
+                        truthy, falsy
+                    ] = format.split(":");
+                    value = (value ? (truthy || "") : (falsy || ""));
+                } else if (typeof(value) === "string" && format) {
                     let [
                         defaultValue, prefix, suffix, length
                     ] = format.split(":");
@@ -457,7 +503,7 @@ class NowPlaying {
                     if (value) {
                         value = (prefix || "") + value + (suffix || "");
                     }
-                }else if (typeof(value) === "number" && format) {
+                } else if (typeof(value) === "number" && format) {
                     if (format === "duration") {
                         value = Math.round(value);
                         let hour = Math.floor(value / 3600);
@@ -511,6 +557,10 @@ class NowPlaying {
                 this.statusItem.show();
 
                 this.validateAutoHide();
+
+                if (this.sampleSize >= 1000) {
+                    this.sampleSize = 1;
+                }
             }
 
             if (this.hideOnPause && !trackInformation.playing) {
@@ -534,6 +584,9 @@ class NowPlaying {
                 trackInformation
             );
         }).catch((error) => {
+            if (error.message === "killed") {
+                return;
+            }
             this.availableAction = undefined;
             this.statusItem.hide();
         });

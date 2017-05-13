@@ -2,7 +2,7 @@
     "name": "now-playing",
     "displayName": "Now Playing",
     "description": "Show current playing track in status bar (macOS only)",
-    "version": "0.1.3",
+    "version": "0.1.4",
     "publisher": "spywhere",
     "icon": "images/icon.png",
     "bugs": {

@@ -1,11 +1,9 @@
-var processes = Application("System Events").applicationProcesses;
-
 function isRunning(app) {
-    try {
-        processes[app]();
-        return true;
-    } catch (e) { }
-    return false;
+    return Application(app).running();
+}
+
+function buildAction(app, action){
+    return "if(Application(\"" + app + "\").running()){Application(\"" + app + "\")." + action + ";}";
 }
 
 var info = {
@@ -15,19 +13,18 @@ var info = {
     vox: {
         state: -1
     },
-	vlc: {
-	    state: -1
-	},
-	quicktime: {
-	    state: -1
-	}
+    vlc: {
+        state: -1
+    },
+    quicktime: {
+        state: -1
+    }
 };
 
 if (isRunning("iTunes")) {
     var app = Application("iTunes");
     if (app.playerState() !== "stopped") {
         var currentTrack = app.currentTrack;
-        gotInfo = true;
         info.itunes = {
             artist: currentTrack.artist(),
             name: currentTrack.name(),
@@ -38,12 +35,12 @@ if (isRunning("iTunes")) {
             volume: app.soundVolume(),
             state: app.playerState() === "playing" ? 1 : 0,
             action: {
-                playpause: "Application(\"iTunes\").playpause()",
-				play: "Application(\"iTunes\").play()",
-				pause: "Application(\"iTunes\").pause()",
-				stop: "Application(\"iTunes\").stop()",
-                next: "Application(\"iTunes\").nextTrack()",
-                previous: "Application(\"iTunes\").previousTrack()"
+                playpause: buildAction("iTunes", "playpause()"),
+                play: buildAction("iTunes", "play()"),
+                pause: buildAction("iTunes", "pause()"),
+                stop: buildAction("iTunes", "stop()"),
+                next: buildAction("iTunes", "nextTrack()"),
+                previous: buildAction("iTunes", "previousTrack()")
             }
         };
     }
@@ -61,18 +58,18 @@ if (isRunning("VOX")) {
         volume: app.playerVolume(),
         state: app.playerState(),
         action: {
-            playpause: "Application(\"VOX\").playpause()",
-			play: "Application(\"VOX\").play()",
-			pause: "Application(\"VOX\").pause()",
-            next: "Application(\"VOX\").next()",
-            previous: "Application(\"VOX\").previous()"
+            playpause: buildAction("VOX", "playpause()"),
+            play: buildAction("VOX", "play()"),
+            pause: buildAction("VOX", "pause()"),
+            next: buildAction("VOX", "next()"),
+            previous: buildAction("VOX", "previous()")
         }
     };
 }
 
 if (isRunning("VLC")) {
     var app = Application("VLC");
-	if (app.nameOfCurrentItem()) {
+    if (app.nameOfCurrentItem()) {
         info.vlc = {
             name: app.nameOfCurrentItem(),
             currentTime: app.currentTime(),
@@ -80,20 +77,20 @@ if (isRunning("VLC")) {
             volume: app.audioVolume() * 100 / 256,
             state: app.playing() ? 1 : 0,
             action: {
-		        play: "Application(\"VLC\").play()",
-			    stop: "Application(\"VLC\").stop()",
-			    mute: "Application(\"VLC\").mute()",
-                next: "Application(\"VLC\").next()",
-                previous: "Application(\"VLC\").previous()"
+                play: buildAction("VLC", "play()"),
+                stop: buildAction("VLC", "stop()"),
+                mute: buildAction("VLC", "mute()"),
+                next: buildAction("VLC", "next()"),
+                previous: buildAction("VLC", "previous()")
             }
         };
-	}
+    }
 }
 
 if (isRunning("QuickTime Player")) {
     var app = Application("QuickTime Player");
-	if (app.documents().length > 0) {
-	    var document = app.documents()[0];
+    if (app.documents().length > 0) {
+        var document = app.documents()[0];
         info.quicktime = {
             name: document.name(),
             currentTime: document.currentTime(),
@@ -101,11 +98,11 @@ if (isRunning("QuickTime Player")) {
             volume: document.audioVolume() * 100,
             state: document.playing() ? 1 : 0,
             action: {
-		        play: "Application(\"QuickTime Player\").play(Application(\"QuickTime Player\").documents()[0])",
-				pause: "Application(\"QuickTime Player\").pause(Application(\"QuickTime Player\").documents()[0])"
+                play: buildAction("QuickTime Player", "play(Application(\"QuickTime Player\").documents()[0])"),
+                pause: buildAction("QuickTime Player", "pause(Application(\"QuickTime Player\").documents()[0])")
             }
         };
-	}
+    }
 }
 
 JSON.stringify(info)
