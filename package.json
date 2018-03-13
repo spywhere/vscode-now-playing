@@ -2,7 +2,7 @@
     "name": "now-playing",
     "displayName": "Now Playing",
     "description": "Show current playing track in status bar (macOS only)",
-    "version": "0.1.4",
+    "version": "0.1.5",
     "publisher": "spywhere",
     "icon": "images/icon.png",
     "bugs": {
@@ -29,7 +29,7 @@
         "*"
     ],
     "main": "./out/extension",
-        "contributes": {
+    "contributes": {
         "configuration": {
             "type": "object",
             "title": "Now Playing Configurations",
@@ -71,7 +71,9 @@
                 },
                 "now-playing.action": {
                     "type": "array",
-                    "default": ["SmartPlayPause"],
+                    "default": [
+                        "SmartPlayPause"
+                    ],
                     "items": {
                         "type": "string",
                         "enum": [

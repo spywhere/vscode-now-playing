@@ -1,5 +1,9 @@
 function isRunning(app) {
-    return Application(app).running();
+    try {
+        return Application(app).running();
+    } catch (error) {
+        return false;
+    }
 }
 
 function buildAction(app, action){
