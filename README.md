@@ -1,6 +1,6 @@
 ## Now Playing
-[![Version](http://vsmarketplacebadge.apphb.com/version/spywhere.now-playing.svg)](https://marketplace.visualstudio.com/items?itemName=spywhere.now-playing)
-[![Installs](http://vsmarketplacebadge.apphb.com/installs/spywhere.now-playing.svg)](https://marketplace.visualstudio.com/items?itemName=spywhere.now-playing)
+[![Version](https://vsmarketplacebadge.apphb.com/version/spywhere.now-playing.svg)](https://marketplace.visualstudio.com/items?itemName=spywhere.now-playing)
+[![Installs](https://vsmarketplacebadge.apphb.com/installs/spywhere.now-playing.svg)](https://marketplace.visualstudio.com/items?itemName=spywhere.now-playing)
 
 Show current playing track in status bar (macOS only)
 
