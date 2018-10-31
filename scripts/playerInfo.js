@@ -1,3 +1,26 @@
+function runCommand(command) {
+  try {
+    var app = Application.currentApplication();
+    app.includeStandardAdditions = true;
+    
+	return app.doShellScript("export PATH=$PATH:/usr/local/bin; " + command);
+  } catch (error) {
+    return undefined;
+  }
+}
+
+function isCommandAvailable(command) {
+  try {
+    return runCommand(command);
+  } catch (error) {
+    return undefined;
+  }
+}
+
+function buildScript(command) {
+  return "var app = Application.currentApplication(); app.includeStandardAdditions = true; app.doShellScript(\"export PATH=$PATH:/usr/local/bin; " + command + "\")";
+}
+
 function isRunning(app) {
     try {
         return Application(app).running();
@@ -22,8 +45,80 @@ var info = {
     },
     quicktime: {
         state: -1
-    }
+    },
+	cmus: {
+	    state: -1
+	}
 };
+
+if (isCommandAvailable("cmus-remote --version")) {
+    var result = runCommand("cmus-remote -Q");
+    var lines = result.split("\r");
+
+    info.cmus["volume"] = 0;
+
+    for (var index in lines) {
+        var line = lines[index];
+        var parts = line.split(" ");
+
+        var command = parts.shift();
+
+        if (command === "status") {
+            info.cmus.state = parts.join(" ");
+        }
+
+        if (command === "tag") {
+            var name = parts.shift();
+
+            if (name === "artist") {
+                info.cmus["artist"] = parts.join(" ");
+	        }
+
+            if (name === "title") {
+                info.cmus["name"] = parts.join(" ");
+            }
+
+            if (name === "album") {
+                info.cmus["album"] = parts.join(" ");
+            }
+
+            if (name === "albumartist") {
+                info.cmus["albumArtist"] = parts.join(" ");
+            }
+        }
+
+        if (command === "set") {
+            var name = parts.shift();
+
+            if (name === "vol_left") {
+                info.cmus.volume += +(parts.join(" "));
+            }
+
+            if (name === "vol_right") {
+                info.cmus.volume += +(parts.join(" "));
+            }
+        }
+
+        if (command === "position") {
+            info.cmus["currentTime"] = +parts.shift();
+        }
+
+        if (command === "duration") {
+            info.cmus["totalTime"] = +parts.shift();
+        }
+    }
+
+    info.cmus.state = info.state === "playing" ? 1 : 0;
+    info.cmus.volume /= 2;
+	info.cmus.action = {
+        playpause: buildScript("cmus-remote -u"),
+        play: buildScript("cmus-remote -p"),
+        pause: buildScript("cmus-remote -U"),
+        stop: buildScript("cmus-remote -s"),
+        next: buildScript("cmus-remote -n"),
+        previous: buildScript("cmus-remote -r")
+    }
+}
 
 if (isRunning("iTunes")) {
     var app = Application("iTunes");
