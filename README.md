@@ -13,6 +13,8 @@ Now Playing is simply an extension that show current playing track in Visual Stu
 
 Now Playing supports the following media player...
 
+- **Spotify** - Play/Pause, Next and Previous
+- **CMUS** - Play/Pause, Stop, Next and Previous
 - **VLC** - Play/Stop, Mute, Next and Previous
 - **QuickTime Player** - Play and Pause (only the first window opened)
 - **iTunes** - Play/Pause, Stop, Next and Previous

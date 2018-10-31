@@ -56,6 +56,8 @@ interface RawTrackInformation {
 }
 
 interface RawPlayerInformation {
+    cmus: RawTrackInformation;
+    spotify: RawTrackInformation;
     itunes: RawTrackInformation;
     vox: RawTrackInformation;
     vlc: RawTrackInformation;
@@ -82,6 +84,7 @@ interface TrackInformation {
     volume: number;
     playing: boolean;
     action: PlayerAction;
+    state: number;
 }
 
 class NowPlaying {
@@ -355,6 +358,7 @@ class NowPlaying {
                         totalTime: information.vlc.totalTime,
                         volume: information.vlc.volume,
                         playing: information.vlc.state === 1,
+                        state: information.vlc.state,
                         action: {
                             play: () => this.executeScript(
                                 information.vlc.action.play
@@ -383,12 +387,74 @@ class NowPlaying {
                         totalTime: information.quicktime.totalTime,
                         volume: information.quicktime.volume,
                         playing: information.quicktime.state === 1,
+                        state: information.quicktime.state,
                         action: {
                             play: () => this.executeScript(
                                 information.quicktime.action.play
                             ),
                             pause: () => this.executeScript(
                                 information.quicktime.action.pause
+                            )
+                        }
+                    });
+                } else if (information.cmus && information.cmus.state !== -1) {
+                    return resolve({
+                        name: information.cmus.name,
+                        artist: information.cmus.artist,
+                        albumArtist: information.cmus.albumArtist,
+                        album: information.cmus.album,
+                        currentTime: information.cmus.currentTime,
+                        totalTime: information.cmus.totalTime,
+                        volume: information.cmus.volume,
+                        playing: information.cmus.state === 1,
+                        state: information.cmus.state,
+                        action: {
+                            playpause: () => this.executeScript(
+                                information.cmus.action.playpause
+                            ),
+                            play: () => this.executeScript(
+                                information.cmus.action.play
+                            ),
+                            pause: () => this.executeScript(
+                                information.cmus.action.pause
+                            ),
+                            stop: () => this.executeScript(
+                                information.cmus.action.stop
+                            ),
+                            next: () => this.executeScript(
+                                information.cmus.action.next
+                            ),
+                            previous: () => this.executeScript(
+                                information.cmus.action.previous
+                            )
+                        }
+                    });
+                } else if (information.spotify && information.spotify.state !== -1) {
+                    return resolve({
+                        name: information.spotify.name,
+                        artist: information.spotify.artist,
+                        albumArtist: information.spotify.albumArtist,
+                        album: information.spotify.album,
+                        currentTime: information.spotify.currentTime,
+                        totalTime: information.spotify.totalTime,
+                        volume: information.spotify.volume,
+                        playing: information.spotify.state === 1,
+                        state: information.spotify.state,
+                        action: {
+                            playpause: () => this.executeScript(
+                                information.spotify.action.playpause
+                            ),
+                            play: () => this.executeScript(
+                                information.spotify.action.play
+                            ),
+                            pause: () => this.executeScript(
+                                information.spotify.action.pause
+                            ),
+                            next: () => this.executeScript(
+                                information.spotify.action.next
+                            ),
+                            previous: () => this.executeScript(
+                                information.spotify.action.previous
                             )
                         }
                     });
@@ -402,6 +468,7 @@ class NowPlaying {
                         totalTime: information.itunes.totalTime,
                         volume: information.itunes.volume,
                         playing: information.itunes.state === 1,
+                        state: information.itunes.state,
                         action: {
                             playpause: () => this.executeScript(
                                 information.itunes.action.playpause
@@ -433,6 +500,7 @@ class NowPlaying {
                         totalTime: information.vox.totalTime,
                         volume: information.vox.volume,
                         playing: information.vox.state === 1,
+                        state: information.vox.state,
                         action: {
                             playpause: () => this.executeScript(
                                 information.vox.action.playpause
@@ -547,6 +615,7 @@ class NowPlaying {
                 this.lastInformation.name !== trackInformation.name ||
                 this.lastInformation.artist !== trackInformation.artist ||
                 this.lastInformation.playing !== trackInformation.playing ||
+                this.lastInformation.state !== trackInformation.state ||
                 (
                     this.lastInformation.albumArtist !==
                     trackInformation.albumArtist
@@ -587,6 +656,8 @@ class NowPlaying {
             if (error.message === "killed") {
                 return;
             }
+
+            this.lastInformation = undefined;
             this.availableAction = undefined;
             this.statusItem.hide();
         });
