@@ -160,31 +160,6 @@ function runCommand(command) {
       }
   }
   
-  if (isRunning("iTunes")) {
-      var app = Application("iTunes");
-      if (app.playerState() !== "stopped") {
-          var currentTrack = app.currentTrack;
-          info.itunes = {
-              artist: currentTrack.artist(),
-              name: currentTrack.name(),
-              album: currentTrack.album(),
-              albumArtist: currentTrack.albumArtist(),
-              currentTime: app.playerPosition(),
-              totalTime: currentTrack.duration(),
-              volume: app.soundVolume(),
-              state: app.playerState() === "playing" ? 1 : 0,
-              action: {
-                  playpause: buildAction("iTunes", "playpause()"),
-                  play: buildAction("iTunes", "play()"),
-                  pause: buildAction("iTunes", "pause()"),
-                  stop: buildAction("iTunes", "stop()"),
-                  next: buildAction("iTunes", "nextTrack()"),
-                  previous: buildAction("iTunes", "previousTrack()")
-              }
-          };
-      }
-  }
-  
   if (isRunning("VOX")) {
       var app = Application("VOX");
       info.vox = {
@@ -206,6 +181,31 @@ function runCommand(command) {
       };
   }
   
+  if (isRunning("iTunes")) {
+    var app = Application("iTunes");
+    if (app.playerState() !== "stopped") {
+        var currentTrack = app.currentTrack;
+        info.itunes = {
+            artist: currentTrack.artist(),
+            name: currentTrack.name(),
+            album: currentTrack.album(),
+            albumArtist: currentTrack.albumArtist(),
+            currentTime: app.playerPosition(),
+            totalTime: currentTrack.duration(),
+            volume: app.soundVolume(),
+            state: app.playerState() === "playing" ? 1 : 0,
+            action: {
+                playpause: buildAction("iTunes", "playpause()"),
+                play: buildAction("iTunes", "play()"),
+                pause: buildAction("iTunes", "pause()"),
+                stop: buildAction("iTunes", "stop()"),
+                next: buildAction("iTunes", "nextTrack()"),
+                previous: buildAction("iTunes", "previousTrack()")
+            }
+        };
+    }
+}
+
   if (isRunning("VLC")) {
       var app = Application("VLC");
       if (app.nameOfCurrentItem()) {

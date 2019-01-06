@@ -348,56 +348,7 @@ class NowPlaying {
                 scriptPath
             ).then((output) => {
                 let information: RawPlayerInformation = JSON.parse(output);
-                if (information.vlc && information.vlc.state !== -1) {
-                    return resolve({
-                        name: information.vlc.name,
-                        artist: "",
-                        albumArtist: "",
-                        album: "",
-                        currentTime: information.vlc.currentTime,
-                        totalTime: information.vlc.totalTime,
-                        volume: information.vlc.volume,
-                        playing: information.vlc.state === 1,
-                        state: information.vlc.state,
-                        action: {
-                            play: () => this.executeScript(
-                                information.vlc.action.play
-                            ),
-                            stop: () => this.executeScript(
-                                information.vlc.action.stop
-                            ),
-                            mute: () => this.executeScript(
-                                information.vlc.action.mute
-                            ),
-                            next: () => this.executeScript(
-                                information.vlc.action.next
-                            ),
-                            previous: () => this.executeScript(
-                                information.vlc.action.previous
-                            )
-                        }
-                    });
-                } else if (information.quicktime && information.quicktime.state !== -1) {
-                    return resolve({
-                        name: information.quicktime.name,
-                        artist: "",
-                        albumArtist: "",
-                        album: "",
-                        currentTime: information.quicktime.currentTime,
-                        totalTime: information.quicktime.totalTime,
-                        volume: information.quicktime.volume,
-                        playing: information.quicktime.state === 1,
-                        state: information.quicktime.state,
-                        action: {
-                            play: () => this.executeScript(
-                                information.quicktime.action.play
-                            ),
-                            pause: () => this.executeScript(
-                                information.quicktime.action.pause
-                            )
-                        }
-                    });
-                } else if (information.cmus && information.cmus.state !== -1) {
+                if (information.cmus && information.cmus.state !== -1) {
                     return resolve({
                         name: information.cmus.name,
                         artist: information.cmus.artist,
@@ -458,6 +409,35 @@ class NowPlaying {
                             )
                         }
                     });
+                } else if (information.vox && information.vox.state !== -1) {
+                    return resolve({
+                        name: information.vox.name,
+                        artist: information.vox.artist,
+                        albumArtist: information.vox.albumArtist,
+                        album: information.vox.album,
+                        currentTime: information.vox.currentTime,
+                        totalTime: information.vox.totalTime,
+                        volume: information.vox.volume,
+                        playing: information.vox.state === 1,
+                        state: information.vox.state,
+                        action: {
+                            playpause: () => this.executeScript(
+                                information.vox.action.playpause
+                            ),
+                            play: () => this.executeScript(
+                                information.vox.action.play
+                            ),
+                            pause: () => this.executeScript(
+                                information.vox.action.pause
+                            ),
+                            next: () => this.executeScript(
+                                information.vox.action.next
+                            ),
+                            previous: () => this.executeScript(
+                                information.vox.action.previous
+                            )
+                        }
+                    });
                 } else if (information.itunes && information.itunes.state !== -1) {
                     return resolve({
                         name: information.itunes.name,
@@ -490,32 +470,52 @@ class NowPlaying {
                             )
                         }
                     });
-                } else if (information.vox && information.vox.state !== -1) {
+                } else if (information.vlc && information.vlc.state !== -1) {
                     return resolve({
-                        name: information.vox.name,
-                        artist: information.vox.artist,
-                        albumArtist: information.vox.albumArtist,
-                        album: information.vox.album,
-                        currentTime: information.vox.currentTime,
-                        totalTime: information.vox.totalTime,
-                        volume: information.vox.volume,
-                        playing: information.vox.state === 1,
-                        state: information.vox.state,
+                        name: information.vlc.name,
+                        artist: "",
+                        albumArtist: "",
+                        album: "",
+                        currentTime: information.vlc.currentTime,
+                        totalTime: information.vlc.totalTime,
+                        volume: information.vlc.volume,
+                        playing: information.vlc.state === 1,
+                        state: information.vlc.state,
                         action: {
-                            playpause: () => this.executeScript(
-                                information.vox.action.playpause
-                            ),
                             play: () => this.executeScript(
-                                information.vox.action.play
+                                information.vlc.action.play
                             ),
-                            pause: () => this.executeScript(
-                                information.vox.action.pause
+                            stop: () => this.executeScript(
+                                information.vlc.action.stop
+                            ),
+                            mute: () => this.executeScript(
+                                information.vlc.action.mute
                             ),
                             next: () => this.executeScript(
-                                information.vox.action.next
+                                information.vlc.action.next
                             ),
                             previous: () => this.executeScript(
-                                information.vox.action.previous
+                                information.vlc.action.previous
+                            )
+                        }
+                    });
+                } else if (information.quicktime && information.quicktime.state !== -1) {
+                    return resolve({
+                        name: information.quicktime.name,
+                        artist: "",
+                        albumArtist: "",
+                        album: "",
+                        currentTime: information.quicktime.currentTime,
+                        totalTime: information.quicktime.totalTime,
+                        volume: information.quicktime.volume,
+                        playing: information.quicktime.state === 1,
+                        state: information.quicktime.state,
+                        action: {
+                            play: () => this.executeScript(
+                                information.quicktime.action.play
+                            ),
+                            pause: () => this.executeScript(
+                                information.quicktime.action.pause
                             )
                         }
                     });
