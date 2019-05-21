@@ -2,9 +2,10 @@
     "name": "now-playing",
     "displayName": "Now Playing",
     "description": "Show current playing track in status bar (macOS only)",
-    "version": "0.2.2",
+    "version": "0.2.3",
     "publisher": "spywhere",
     "icon": "images/icon.png",
+    "extensionKind": "ui",
     "bugs": {
         "url": "https://github.com/spywhere/vscode-now-playing/issues"
     },
