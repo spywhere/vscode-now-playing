@@ -2,7 +2,7 @@
     "name": "now-playing",
     "displayName": "Now Playing",
     "description": "Show current playing track in status bar (macOS only)",
-    "version": "0.2.3",
+    "version": "0.3.0",
     "publisher": "spywhere",
     "icon": "images/icon.png",
     "extensionKind": "ui",
@@ -21,7 +21,7 @@
         "url": "https://github.com/spywhere/vscode-now-playing.git"
     },
     "engines": {
-        "vscode": "^1.12.0"
+        "vscode": "^1.36.0"
     },
     "categories": [
         "Other"
@@ -90,6 +90,31 @@
                         ]
                     },
                     "description": "Default action for status bar item. Always run first available action. Set to empty array to disable."
+                },
+                "now-playing.priority": {
+                    "type": "array",
+                    "default": [
+                        "cmus",
+                        "spotify",
+                        "vox",
+                        "itunes",
+                        "vlc",
+                        "quicktime"
+                    ],
+                    "minItems": 1,
+                    "uniqueItems": true,
+                    "items": {
+                        "type": "string",
+                        "enum": [
+                            "cmus",
+                            "spotify",
+                            "vox",
+                            "itunes",
+                            "vlc",
+                            "quicktime"
+                        ]
+                    },
+                    "description": "Player preferences (priority), from highest to lowest."
                 }
             }
         }
@@ -100,8 +125,9 @@
         "postinstall": "node ./node_modules/vscode/bin/install"
     },
     "devDependencies": {
+        "@types/node": "^6.0.40",
+        "@types/vscode": "^1.36.0",
         "typescript": "^2.0.3",
-        "vscode": "^1.0.0",
-        "@types/node": "^6.0.40"
+        "vscode": "^1.0.0"
     }
 }
