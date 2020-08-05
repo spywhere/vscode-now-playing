@@ -15,6 +15,7 @@ Now Playing supports the following media player...
 
 - **Spotify** - Play/Pause, Next and Previous
 - **CMUS** - Play/Pause, Stop, Next and Previous
+- **MPD** (through `nc` netcat) - Play/Pause, Stop, Next and Previous
 - **VLC** - Play/Stop, Mute, Next and Previous
 - **QuickTime Player** - Play and Pause (only the first window opened)
 - **iTunes** (**Music** on Mac OS Catalina) - Play/Pause, Stop, Next and Previous

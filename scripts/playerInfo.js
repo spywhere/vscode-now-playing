@@ -34,6 +34,9 @@ function buildAction(app, action){
 }
 
 var info = {
+    mpd: {
+        state: -1
+    },
     cmus: {
         state: -1
     },
@@ -53,6 +56,41 @@ var info = {
         state: -1
     }
 };
+
+if (isCommandAvailable("echo \"close\" | nc 127.0.0.1 6600 | grep \"OK MPD\"")) {
+    var result = runCommand("echo \"status\ncurrentsong\nclose\" | nc 127.0.0.1 6600");
+
+    result = result.split("\r")
+    result = result.reduce(
+        (output, item) => (
+            ([key, value]) => ({...output,[key]: value})
+        )(
+            item.split(': ')
+        ),
+        {}
+    );
+
+	if (result.state !== "stop") {
+        info.mpd = {
+            artist: result.Artist,
+            name: result.Title,
+            album: result.Album,
+            albumArtist: result.AlbumArtist,
+            currentTime: +result.elapsed,
+            totalTime: +result.duration,
+            volume: +result.volume,
+            state: result.state === "play" ? 1 : 0,
+            action: {
+                playpause: buildScript("echo \\\"pause\\\nclose\\\" | nc 127.0.0.1 6600"),
+                play: buildScript("echo \\\"pause 0\\\nclose\\\" | nc 127.0.0.1 6600"),
+                pause: buildScript("echo \\\"pause 1\\\nclose\\\" | nc 127.0.0.1 6600"),
+                stop: buildScript("echo \\\"stop\\\nclose\\\" | nc 127.0.0.1 6600"),
+                next: buildScript("echo \\\"next\\\nclose\\\" | nc 127.0.0.1 6600"),
+                previous: buildScript("echo \\\"previous\\\nclose\\\" | nc 127.0.0.1 6600")
+            }
+        };
+	}
+}
 
 if (isCommandAvailable("cmus-remote --version")) {
     var result = runCommand("cmus-remote -Q");

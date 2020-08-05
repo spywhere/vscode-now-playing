@@ -2,7 +2,7 @@
     "name": "now-playing",
     "displayName": "Now Playing",
     "description": "Show current playing track in status bar (macOS only)",
-    "version": "0.3.0",
+    "version": "0.4.0",
     "publisher": "spywhere",
     "icon": "images/icon.png",
     "extensionKind": "ui",
@@ -94,6 +94,7 @@
                 "now-playing.priority": {
                     "type": "array",
                     "default": [
+                        "mpd",
                         "cmus",
                         "spotify",
                         "vox",
@@ -106,6 +107,7 @@
                     "items": {
                         "type": "string",
                         "enum": [
+                            "mpd",
                             "cmus",
                             "spotify",
                             "vox",
@@ -126,7 +128,6 @@
     },
     "devDependencies": {
         "@types/node": "^6.0.40",
-        "@types/vscode": "^1.36.0",
         "typescript": "^2.0.3",
         "vscode": "^1.0.0"
     }
